@@ -1,0 +1,19 @@
+homepage:
+    path: /
+    defaults: { _controller: AppBundle:Default:index}
+
+tomovies_index:
+    path: /toMovies/
+    defaults: { _controller: AppBundle:ToMovie:index}
+
+tomovies_show:
+    path: /toMovies/show
+    defaults: { _controller: AppBundle:ToMovie:show}
+
+tomovies_save:
+    path: /toMovies/save
+    defaults: { _controller: AppBundle:ToMovie:save}
+
+tomovies_owned:
+    path: /toMovies/owned
+    defaults: { _controller: AppBundle:ToMovie:owned}

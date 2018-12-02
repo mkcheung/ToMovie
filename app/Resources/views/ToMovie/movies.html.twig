@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ page_title }}</title>
+    </head>
+    <body>
+        <h1>{{ page_title }}</h1>
+
+		<form action="/toMovies/save" method="POST">
+	        <table>
+	    		<tr>
+	    			<th>Owned</th><th>Title</th><th>Release Date</th><th>Overview</th>
+	    		</tr>
+	        {% for movie in movies %}
+	        	<tr> 
+	        		{% if movie.owned %}
+					   
+	        			<td> 
+	        				<input id="{{movie.id}}" type="checkbox" class="film" name="movie_owned_list[]" value="{{movie.title}}" checked="checked" />
+							<input id="{{movie.id}}_hidden" type='checkbox' style="opacity:0;" value="{{movie.title}}" name="movie_not_owned_list[]" />
+	        			</td>
+	        			
+					{% else %}
+	        			<td> 
+	        				<input id="{{movie.id}}" type="checkbox" class="film" name="movie_owned_list[]" value="{{movie.title}}"  />
+	        				<input id="{{movie.id}}_hidden" type='checkbox' style="opacity:0;" value="{{movie.title}}" name="movie_not_owned_list[]" />
+	        			</td>
+	        			
+					{% endif %}
+		            <td>{{ movie.title }}</td>
+		            <td>{{ movie.release_date }}</td>
+		            <td>{{ movie.overview }}</td>
+	        	</tr> 
+	        {% endfor %}
+	        </table>
+		    <input type="submit" />
+		</form>
+    </body>
+    	<br/>
+        <div>
+        	<span>Total Results: {{numMatches}}</span>
+        </div>
+    </body>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+  
+    $('.film').change(function() {
+        // console.log($(this).is(":checked"));
+        let id = ($(this).attr('id'))+'_hidden';
+        // console.log($(this).is(":checked"));
+        if(!$(this).is(":checked")){
+        	$(this).attr('checked', false);
+        	$('#'+($(this).attr('id'))+'_hidden').attr('checked', true);
+        } 
+        else {
+        	$(this).attr('checked', true);
+        	$('#'+($(this).attr('id'))+'_hidden').attr('checked', false);
+        }   
+    });
+    
+  
+  
+</script>
+</html>
