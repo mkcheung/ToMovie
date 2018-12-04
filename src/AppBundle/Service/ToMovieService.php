@@ -48,8 +48,14 @@ class ToMovieService
     public function prepDisplayMovieFormat($movies, $ownedMovieTitles){
 
         $displayedMovies = [];
-        if(count($movies) > 0){
-            for($i = 0; $i < 10 ; $i++){
+
+        $movieCount = count($movies);
+
+        if($movieCount > 0){
+
+            $numMoviesToDisplay = ($movieCount < 10) ? $movieCount : 10;
+
+            for($i = 0; $i < $numMoviesToDisplay ; $i++){
                 $displayedMovies[$i]['id'] = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', preg_replace('/\s+/', '_', $movies[$i]->title)));
                 $displayedMovies[$i]['title'] = $movies[$i]->title;
                 $displayedMovies[$i]['release_date'] = $movies[$i]->release_date;

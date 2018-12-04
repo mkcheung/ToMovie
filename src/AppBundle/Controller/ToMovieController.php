@@ -99,7 +99,6 @@ class ToMovieController extends Controller
             $em->flush();
 
             $movieTitleResults = $em->getRepository(Movie::class)->findBy(['title' => $movieTitles]);
-
             foreach ($movieTitleResults as $movieTitleResult) {
                 $title = $movieTitleResult->getTitle();
                 if(in_array($title, $movieTitles)){
