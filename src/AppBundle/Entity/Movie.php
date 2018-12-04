@@ -29,6 +29,12 @@ class Movie {
     protected $title;
 
     /**
+     * @var string
+     * @ORM\Column (type = "string", length = 255)
+     */
+    protected $uniqueTitle;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="createdAt", type="datetime", nullable=false)
      */
@@ -41,11 +47,13 @@ class Movie {
 
     public function __construct(
         $title,
-        $userId
+        $userId,
+        $uniqueTitle
     ) {
         $date = new \DateTime();
         $this->title = $title;
         $this->user_id = $userId;
+        $this->uniqueTitle = $uniqueTitle;
         $this->createdAt = $date;
         $this->modifiedAt = $date;
     }
@@ -99,9 +107,24 @@ class Movie {
         $this->title = $title;
     }
 
+    /**
+     * @return string
+     */
+    public function getUniqueTitle()
+    {
+        return $this->uniqueTitle;
+    }
 
     /**
-     * @return \DateTime
+     * @param string $uniqueTitle
+     */
+    public function setUniqueTitle($uniqueTitle)
+    {
+        $this->uniqueTitle = $uniqueTitle;
+    }
+
+    /**
+     * @return string
      */
     public function getCreatedAt()
     {

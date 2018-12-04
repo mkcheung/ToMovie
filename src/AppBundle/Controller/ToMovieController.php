@@ -69,9 +69,9 @@ class ToMovieController extends Controller
             return $this->redirect($this->generateUrl('tomovies_index'));
         }
 
-        $ownedMovieTitles = $toMovieService->getAllOwnedMovieTitles();
+        $ownedUniqueMovieTitles = $toMovieService->getAllOwnedMovieTitles(true);
 
-        $displayedMovies = $toMovieService->prepDisplayMovieFormat($movies, $ownedMovieTitles);
+        $displayedMovies = $toMovieService->prepDisplayMovieFormat($movies, $ownedUniqueMovieTitles);
 
         return $this->render('ToMovie/movies.html.twig', [
             'page_title'   => 'Movies',
@@ -88,28 +88,30 @@ class ToMovieController extends Controller
 
         try {
 
-            $movieTitles = (!empty($postParameters['movie_owned_list'])) ? $postParameters['movie_owned_list'] : [] ; ;
+            $movieTitlesToOwn = (!empty($postParameters['movie_owned_list'])) ? $postParameters['movie_owned_list'] : [] ; ;
             $movieNotOwned = (!empty($postParameters['movie_not_owned_list'])) ? $postParameters['movie_not_owned_list'] : [] ;
 
-            $movieNotOwnedResults = $em->getRepository(Movie::class)->findBy(['title' => $movieNotOwned]);
+            $movieNotOwnedResults = $em->getRepository(Movie::class)->findBy(['uniqueTitle' => $movieNotOwned]);
 
             foreach ($movieNotOwnedResults as $movieNotOwnedResult){
                 $em->remove($movieNotOwnedResult);
             }
             $em->flush();
 
-            $movieTitleResults = $em->getRepository(Movie::class)->findBy(['title' => $movieTitles]);
+            $movieTitleResults = $em->getRepository(Movie::class)->findBy(['uniqueTitle' => $movieTitlesToOwn]);
             foreach ($movieTitleResults as $movieTitleResult) {
-                $title = $movieTitleResult->getTitle();
-                if(in_array($title, $movieTitles)){
-                    $key = array_search($title, $movieTitles);
-                    unset($movieTitles[$key]);
+
+                $uniqueTitle = $movieTitleResult->getUniqueTitle();
+                if(in_array($uniqueTitle, $movieTitlesToOwn)){
+                    $key = array_search($uniqueTitle, $movieTitlesToOwn);
+                    unset($movieTitlesToOwn[$key]);
                 }
             }
 
-            foreach ($movieTitles as $movieTitle){
+            foreach ($movieTitlesToOwn as $movieTitleToOwn){
 
-                $movie = new Movie($movieTitle, 1);
+                $movieTitleAndReleaseDate = explode('_', $movieTitleToOwn);
+                $movie = new Movie($movieTitleAndReleaseDate[0], 1, $movieTitleToOwn);
                 $em->persist($movie);
             }
 

@@ -9,8 +9,9 @@ Instructions For Installation and Utilization:
 2) Go into the ToMovie Directory
 3) run 'composer install' (when prompted for the database user and password, you may need to change it to the relevant user/password that your Mysql database corresponds to. The database name can remain as is)
 4) at the command line, enter 'php bin/console doctrine:database:create' - doctrine will create the database known as symfony'
-5) type in 'php bin/console server:run'
-6) In a browser, plug in localhost:8000 and peruse the program
+5) now enter 'php bin/console doctrine:schema:update --force' to create the table movie in the symfony database. This is where the movies will be stored.
+6) type in 'php bin/console server:run'
+7) In a browser, plug in localhost:8000 and peruse the program
 	- You should see a link 'Select Movie'. Click on it.
 	- You will be redirected to /toMovie/. This page will show you a list of all the movies you currently own.
 	- Enter in the name of a movie in the input field and hit enter to access the To Movie DB.

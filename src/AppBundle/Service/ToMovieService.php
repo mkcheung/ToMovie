@@ -35,17 +35,23 @@ class ToMovieService
         return $response;
     }
 
-    public function getAllOwnedMovieTitles(){
+    public function getAllOwnedMovieTitles($unique=false){
 
         $movieTitles = [];
         $movies = $this->movieRepository->findAll();
-        foreach ($movies as $movie) {
-            array_push($movieTitles,$movie->getTitle());
+        if($unique) {
+            foreach ($movies as $movie) {
+                array_push($movieTitles,$movie->getUniqueTitle());
+            }
+        } else {
+            foreach ($movies as $movie) {
+                array_push($movieTitles,$movie->getTitle());
+            }
         }
         return $movieTitles;
     }
 
-    public function prepDisplayMovieFormat($movies, $ownedMovieTitles){
+    public function prepDisplayMovieFormat($movies, $ownedUniqueMovieTitles){
 
         $displayedMovies = [];
 
@@ -58,6 +64,7 @@ class ToMovieService
             for($i = 0; $i < $numMoviesToDisplay ; $i++){
                 $displayedMovies[$i]['id'] = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', preg_replace('/\s+/', '_', $movies[$i]->title)));
                 $displayedMovies[$i]['title'] = $movies[$i]->title;
+                $displayedMovies[$i]['unique_title'] = $movies[$i]->title.'_'.$movies[$i]->release_date;
                 $displayedMovies[$i]['release_date'] = $movies[$i]->release_date;
                 $displayedMovies[$i]['overview'] = $movies[$i]->overview;
                 $displayedMovies[$i]['owned'] = false;
@@ -65,7 +72,7 @@ class ToMovieService
         }
 
         foreach ($displayedMovies as &$displayedMovie) {
-            if(in_array($displayedMovie['title'], $ownedMovieTitles)){
+            if(in_array($displayedMovie['unique_title'], $ownedUniqueMovieTitles)){
                 $displayedMovie['owned'] = true;
             }
         }
