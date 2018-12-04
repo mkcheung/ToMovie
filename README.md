@@ -8,6 +8,7 @@ Instructions For Installation and Utilization:
 1) Clone the repository.
 2) Go into the ToMovie Directory
 3) run 'composer install' 
+	-this will install all of the dependancies, including Symfony 3.4 as well as the Doctrine ORM.
 	-database host is localhost(127.0.0.1) and port is null. These settings may need to be customized based on the database of whoever is utilizing this program.
 	-when prompted for the database user and password, you may need to change it to the relevant user/password that your Mysql database corresponds to. The database name can remain as is.
 		-Should the settings need to be altered afterwards, please adjust in app/config/parameters.yml

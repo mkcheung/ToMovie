@@ -86,10 +86,17 @@ class ToMovieController extends Controller
 
         $postParameters = $request->request->all();
 
+        $displaySuccessMessage = false;
+
         try {
 
             $movieTitlesToOwn = (!empty($postParameters['movie_owned_list'])) ? $postParameters['movie_owned_list'] : [] ; ;
             $movieNotOwned = (!empty($postParameters['movie_not_owned_list'])) ? $postParameters['movie_not_owned_list'] : [] ;
+
+
+            if(!empty($movieTitlesToOwn) || !empty($movieNotOwned)){
+                $displaySuccessMessage = true;
+            }
 
             $movieNotOwnedResults = $em->getRepository(Movie::class)->findBy(['uniqueTitle' => $movieNotOwned]);
 
@@ -117,10 +124,12 @@ class ToMovieController extends Controller
 
             $em->flush();
 
-            $this->addFlash(
-                'success',
-                'Owned Movies modified!'
-            );
+            if($displaySuccessMessage){
+                $this->addFlash(
+                    'success',
+                    'Owned Movies modified!'
+                );
+            }
             
             return $this->redirect($this->generateUrl('tomovies_index'));
         } catch (\Exception $e){
