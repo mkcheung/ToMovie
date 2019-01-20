@@ -8,6 +8,8 @@ use JsonRPC\Exception\AuthenticationFailureException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client as GuzzleClient;
+use function var_dump;
+
 class ToMovieService
 {
     private $api_key;
@@ -29,11 +31,9 @@ class ToMovieService
 
         $movieApiUrl = 'https://api.themoviedb.org/3/search/movie?include_adult=false&page=1&language=en-US&api_key='.$this->api_key.'&query=\''.$title.'\'';
 
-//        $client       = new GuzzleClient();
         $res          = $this->client->request('GET', $movieApiUrl);
-        $jsonResponse = $res->getBody();
-        $response    = json_decode($jsonResponse);
-        var_dump($response);die;
+        $body = $res->getBody();
+        $response    = json_decode($body->getContents());
 
         return $response;
     }
