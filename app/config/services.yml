@@ -33,8 +33,12 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    guzzle.client:
+        class: GuzzleHttp\Client
+
+
     # add more services, or override services that need manual wiring
     app.to_movie_service:
         public: true
         class:     AppBundle\Service\ToMovieService
-        arguments: ['@doctrine.orm.default_entity_manager', '@repository.movie', %to_movie_api_key%]
+        arguments: ['@doctrine.orm.default_entity_manager', '@repository.movie', '@guzzle.client', %to_movie_api_key%]
