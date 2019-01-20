@@ -55,7 +55,6 @@ class ToMovieService
     }
 
     public function prepDisplayMovieFormat($movies, $ownedUniqueMovieTitles){
-
         $displayedMovies = [];
 
         $movieCount = count($movies);
